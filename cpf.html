@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Dados por CPF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #result strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Dados por CPF</h1>
+    <input type="text" id="cpf-input" placeholder="Digite o CPF (somente números)" />
+    <button id="fetch-button">Buscar Dados</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetch-button').addEventListener('click', function() {
+            const cpfQuery = document.getElementById('cpf-input').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Limpa resultados anteriores
+
+            // Verifica se o CPF está vazio ou inválido
+            if (!cpfQuery || cpfQuery.length !== 11 || !/^\d+$/.test(cpfQuery)) {
+                resultDiv.innerText = 'Por favor, digite um CPF válido (somente números).';
+                return;
+            }
+
+            // Formata a URL da API da Minha Receita
+            const apiUrl = `https://minhareceita.org/${cpfQuery}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao consultar o CPF: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'error') {
+                        resultDiv.innerText = 'CPF não encontrado ou inválido.';
+                    } else {
+                        // Exibe as informações retornadas pela API
+                        resultDiv.innerHTML = `
+                            <strong>Nome:</strong> ${data.nome || 'N/A'}<br>
+                            <strong>CPF:</strong> ${data.cpf || 'N/A'}<br>
+                            <strong>Situação Cadastral:</strong> ${data.situacao || 'N/A'}<br>
+                            <strong>Data de Nascimento:</strong> ${data.data_nascimento || 'N/A'}<br>
+                            <strong>Naturalidade:</strong> ${data.naturalidade || 'N/A'}<br>
+                            <strong>Nome da Mãe:</strong> ${data.mae || 'N/A'}<br>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    resultDiv.innerText = 'Erro ao buscar dados: ' + error.message;
+                });
+        });
+    </script>
+</body>
+</html>
