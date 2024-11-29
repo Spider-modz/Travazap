@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de IP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #result strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de IP</h1>
+    <input type="text" id="ip-input" placeholder="Digite um IP ou domínio" />
+    <button id="fetch-button">Buscar Dados</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetch-button').addEventListener('click', function() {
+            const ipQuery = document.getElementById('ip-input').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Limpa resultados anteriores
+
+            if (!ipQuery) {
+                resultDiv.innerText = 'Por favor, digite um IP ou domínio.';
+                return;
+            }
+
+            const apiUrl = `https://api.ip2location.io/?key=84D335D87CCF62B2C88C9B476F0CA4C2&ip=${ipQuery}&format=json`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na resposta da API: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'fail') {
+                        resultDiv.innerText = `Erro: ${data.message}`;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <strong>IP:</strong> ${data.ip}<br>
+                            <strong>País:</strong> ${data.country_name}<br>
+                            <strong>Região:</strong> ${data.region_name}<br>
+                            <strong>Cidade:</strong> ${data.city_name}<br>
+                            <strong>Latitude:</strong> ${data.latitude}<br>
+                            <strong>Longitude:</strong> ${data.longitude}<br>
+                            <strong>ISP:</strong> ${data.isp}<br>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    resultDiv.innerText = 'Erro ao buscar dados: ' + error.message;
+                });
+        });
+    </script>
+</body>
+</html>
