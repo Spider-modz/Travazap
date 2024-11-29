@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <h1>Consulta de IP</h1>
+    <h1>Consulta de IP 2.0</h1>
     <input type="text" id="ip-input" placeholder="Digite um IP ou domínio" />
     <button id="fetch-button">Buscar Dados</button>
     <div id="result"></div>
@@ -36,7 +36,9 @@
                 return;
             }
 
-            const apiUrl = `https://api.ip2location.io/?key=84D335D87CCF62B2C88C9B476F0CA4C2&ip=${ipQuery}&format=json`;
+            // Substitua "your-api-key" pela sua chave da API do ipinfo.io
+            const apiKey = 'e5c97aa58811cf';
+            const apiUrl = `https://ipinfo.io/${ipQuery}/json?token=${apiKey}`;
 
             fetch(apiUrl)
                 .then(response => {
@@ -46,17 +48,17 @@
                     return response.json();
                 })
                 .then(data => {
-                    if (data.status === 'fail') {
-                        resultDiv.innerText = `Erro: ${data.message}`;
+                    if (data.error) {
+                        resultDiv.innerText = `Erro: ${data.error.message}`;
                     } else {
                         resultDiv.innerHTML = `
                             <strong>IP:</strong> ${data.ip}<br>
-                            <strong>País:</strong> ${data.country_name}<br>
-                            <strong>Região:</strong> ${data.region_name}<br>
-                            <strong>Cidade:</strong> ${data.city_name}<br>
-                            <strong>Latitude:</strong> ${data.latitude}<br>
-                            <strong>Longitude:</strong> ${data.longitude}<br>
-                            <strong>ISP:</strong> ${data.isp}<br>
+                            <strong>País:</strong> ${data.country}<br>
+                            <strong>Região:</strong> ${data.region}<br>
+                            <strong>Cidade:</strong> ${data.city}<br>
+                            <strong>Hostname:</strong> ${data.hostname}<br>
+                            <strong>Org:</strong> ${data.org}<br>
+                            <strong>Loc (Latitude e Longitude):</strong> ${data.loc}<br>
                         `;
                     }
                 })
