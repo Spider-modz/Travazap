@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de CNPJ</title>
+    <title>Consulta de CNPJ 2.0</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,15 +53,15 @@
                     } else {
                         // Exibe as informações retornadas pela API
                         resultDiv.innerHTML = `
-                            <strong>Razão Social:</strong> ${data.nome}<br>
-                            <strong>CNPJ:</strong> ${data.cnpj}<br>
-                            <strong>Atividade Principal:</strong> ${data.atividade_principal[0].text}<br>
-                            <strong>Endereço:</strong> ${data.logradouro}, ${data.numero}, ${data.bairro}, ${data.municipio} - ${data.uf}<br>
-                            <strong>CEP:</strong> ${data.cep}<br>
-                            <strong>Telefone:</strong> ${data.telefone}<br>
-                            <strong>Email:</strong> ${data.email}<br>
-                            <strong>Data de Abertura:</strong> ${data.data_abertura}<br>
-                            <strong>Natureza Jurídica:</strong> ${data.natureza_juridica}
+                            <strong>Razão Social:</strong> ${data.nome || 'N/A'}<br>
+                            <strong>CNPJ:</strong> ${data.cnpj || 'N/A'}<br>
+                            <strong>Atividade Principal:</strong> ${data.atividade_principal && data.atividade_principal[0] ? data.atividade_principal[0].text : 'N/A'}<br>
+                            <strong>Endereço:</strong> ${data.logradouro || 'N/A'}, ${data.numero || 'N/A'}, ${data.bairro || 'N/A'}, ${data.municipio || 'N/A'} - ${data.uf || 'N/A'}<br>
+                            <strong>CEP:</strong> ${data.cep || 'N/A'}<br>
+                            <strong>Telefone:</strong> ${data.telefone || 'N/A'}<br>
+                            <strong>Email:</strong> ${data.email || 'N/A'}<br>
+                            <strong>Data de Abertura:</strong> ${data.data_abertura || 'N/A'}<br>
+                            <strong>Natureza Jurídica:</strong> ${data.natureza_juridica || 'N/A'}
                         `;
                     }
                 })
