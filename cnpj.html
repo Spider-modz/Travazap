@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de CNPJ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #result strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Dados por CNPJ</h1>
+    <input type="text" id="cnpj-input" placeholder="Digite o CNPJ (sem pontuação)" />
+    <button id="fetch-button">Buscar Dados</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetch-button').addEventListener('click', function() {
+            const cnpjQuery = document.getElementById('cnpj-input').value.trim();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Limpa resultados anteriores
+
+            // Verifica se o CNPJ está vazio ou inválido
+            if (!cnpjQuery || cnpjQuery.length !== 14 || !/^\d+$/.test(cnpjQuery)) {
+                resultDiv.innerText = 'Por favor, digite um CNPJ válido (somente números).';
+                return;
+            }
+
+            // Formata a URL da API do minhareceita.org
+            const apiUrl = `https://minhareceita.org/${cnpjQuery}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao consultar o CNPJ: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'error') {
+                        resultDiv.innerText = 'CNPJ não encontrado ou inválido.';
+                    } else {
+                        // Exibe as informações retornadas pela API
+                        resultDiv.innerHTML = `
+                            <strong>Razão Social:</strong> ${data.nome}<br>
+                            <strong>CNPJ:</strong> ${data.cnpj}<br>
+                            <strong>Atividade Principal:</strong> ${data.atividade_principal[0].text}<br>
+                            <strong>Endereço:</strong> ${data.logradouro}, ${data.numero}, ${data.bairro}, ${data.municipio} - ${data.uf}<br>
+                            <strong>CEP:</strong> ${data.cep}<br>
+                            <strong>Telefone:</strong> ${data.telefone}<br>
+                            <strong>Email:</strong> ${data.email}<br>
+                            <strong>Data de Abertura:</strong> ${data.data_abertura}<br>
+                            <strong>Natureza Jurídica:</strong> ${data.natureza_juridica}
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    resultDiv.innerText = 'Erro ao buscar dados: ' + error.message;
+                });
+        });
+    </script>
+</body>
+</html>
