@@ -173,27 +173,15 @@
             </nav>
             <!-- Navbar End -- <!-->
     <title>Consulta de IP</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #result {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-        }
-        #result strong {
-            color: #333;
-        }
-    </style>
+
 </head>
 <body>
-    <h1>Consulta de IP 2.0</h1>
-    <input type="text" id="ip-input" placeholder="Digite um IP ou domínio" />
-    <button id="fetch-button">Buscar Dados</button>
+    <div class="p-2 mb-2 bg-primary text-white">PUXAR DADOS 🔎 [IP]</div>
+    <input class="form-control mb-3" type="text" id="ip-input" placeholder="Ip Ou Domínio [Com Pontuação]"
+                                aria-label="default input example">
+    <button type="button" id="fetch-button" class="btn btn-outline-primary m-2">Buscar!</button>
     <div id="result"></div>
-
+                                    
     <script>
         document.getElementById('fetch-button').addEventListener('click', function() {
             const ipQuery = document.getElementById('ip-input').value.trim();
