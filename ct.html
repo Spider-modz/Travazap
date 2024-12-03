@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Visualizações</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .contador {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bem-vindo à minha página!</h1>
+    <div class="contador">
+        Contador de Visualizações: <span id="contador">0</span>
+    </div>
+
+    <script>
+        // Verifica se já existe um contador no localStorage
+        let contador = localStorage.getItem('contadorVisualizacoes');
+
+        // Se não existir, inicializa com 0
+        if (contador === null) {
+            contador = 0;
+        } else {
+            contador = parseInt(contador);
+        }
+
+        // Incrementa o contador
+        contador++;
+
+        // Armazena o novo valor no localStorage
+        localStorage.setItem('contadorVisualizacoes', contador);
+
+        // Atualiza o contador na página
+        document.getElementById('contador').textContent = contador;
+    </script>
+</body>
+</html>
